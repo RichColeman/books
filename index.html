@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Strategy for Agencies: A Training Course</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .sidebar-item.active {
+            background-color: #3b82f6; /* bg-blue-600 */
+            color: white;
+        }
+        .sidebar-item.completed .fa-circle-check {
+            display: inline-block;
+        }
+        .lesson-item.completed {
+            color: #16a34a; /* text-green-600 */
+        }
+         .lesson-item.completed .fa-circle {
+            display: none;
+         }
+        .lesson-item.completed .fa-check-circle {
+            display: inline-block;
+        }
+        .progress-bar-fill {
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div id="app" class="flex flex-col md:flex-row h-screen">
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-full md:w-80 bg-gray-800 text-white p-4 md:p-6 flex-shrink-0 flex flex-col space-y-4 transition-transform transform md:transform-none -translate-x-full md:translate-x-0 fixed md:relative h-full z-20">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold">AI Strategy Course</h1>
+                 <button id="close-sidebar-btn" class="md:hidden text-white text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="flex-grow overflow-y-auto">
+                <nav id="course-modules" class="space-y-2">
+                    <!-- Modules will be injected here by JS -->
+                </nav>
+            </div>
+             <!-- Progress Bar -->
+            <div class="mt-auto pt-4">
+                <span class="text-sm font-medium text-gray-300">Course Progress</span>
+                <div class="w-full bg-gray-600 rounded-full h-2.5 mt-1">
+                    <div id="progress-bar-fill" class="bg-green-500 h-2.5 rounded-full progress-bar-fill" style="width: 0%"></div>
+                </div>
+                <p id="progress-text" class="text-center text-sm mt-1 text-gray-400">0% Complete</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+             <button id="open-sidebar-btn" class="md:hidden p-2 mb-4 bg-gray-800 text-white rounded-md">
+                <i class="fas fa-bars"></i> Menu
+            </button>
+            <div id="content-area">
+                <!-- Content will be injected here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- DATA ---
+        // Course content derived from the provided document
+        const courseData = {
+            modules: [
+                {
+                    id: 'module1',
+                    title: 'The Educated Client: Understanding the MIT AI Perspective',
+                    lessons: [
+                        { id: 'l1-1', title: 'Program Snapshot: A Major Investment', content: `
+                            <h3 class="text-2xl font-semibold mb-3">A Major Investment in Strategic Knowledge</h3>
+                            <p class="mb-4 text-gray-600">Your client's completion of the MIT "AI and ML: Leading Business Growth" program was a significant commitment. Understanding this context is the first step in bridging the perception gap.</p>
+                            <ul class="list-disc list-inside space-y-3 bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                                <li><strong class="font-semibold">Duration & Effort:</strong> The program spans 21 weeks, requiring 4-6 hours per week.</li>
+                                <li><strong class="font-semibold">Financial Cost:</strong> The listed fee is a substantial USD 9,000.</li>
+                                <li><strong class="font-semibold">Target Audience:</strong> It's designed for high-performing business leaders, senior managers, and directors—individuals positioned to drive strategy.</li>
+                                <li><strong class="font-semibold">Core Objective:</strong> The program aims to arm leaders with the knowledge to use AI/ML for innovation, efficiency, and business growth.</li>
+                            </ul>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">Your client didn't just take a technical course; they invested heavily in a strategic leadership program. They now view AI as a fundamental driver of business strategy and expect their partners to engage at this level.</p>
+                            </div>
+                        `},
+                        { id: 'l1-2', title: 'Curriculum Deep Dive', content: `
+                            <h3 class="text-2xl font-semibold mb-3">What Your Client Learned: The Curriculum</h3>
+                            <p class="mb-4 text-gray-600">The MIT curriculum is comprehensive, covering the entire AI landscape from a business leader's perspective. Your client is now familiar with these key topics:</p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <h4 class="font-semibold mb-2 text-gray-700">Foundations & Lifecycle</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-sm">
+                                        <li>AI Evolution and Fundamentals</li>
+                                        <li>Managing the AI/ML Initiative Lifecycle (Ideation to Deployment)</li>
+                                        <li>Understanding Data, Conditioning, and AI Bias</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <h4 class="font-semibold mb-2 text-gray-700">Business Application & Strategy</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-sm">
+                                        <li>Predictive Analysis and Decision Systems</li>
+                                        <li>Leading Digital Transformation with AI</li>
+                                        <li>Implementing AI/ML in Business</li>
+                                        <li>Building Robust AI Capabilities</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <h4 class="font-semibold mb-2 text-gray-700">Ethics & Governance</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-sm">
+                                        <li>Explainability and AI Governance</li>
+                                        <li>The Imperative of Ethical and Responsible AI</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-lg border">
+                                    <h4 class="font-semibold mb-2 text-gray-700">Future-Forward Topics</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-sm">
+                                        <li>Deep Learning and Neural Networks</li>
+                                        <li>Agentic AI and Autonomous Decision-Making</li>
+                                        <li>Customizing Large Language Models (LLMs) for business</li>
+                                    </ul>
+                                </div>
+                            </div>
+                             <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">Your client has been exposed to the entire strategic spectrum of AI. They now have a structured framework for evaluating AI initiatives and expect discussions to be sophisticated, covering not just the 'what' but the 'how' and 'why' of AI in business.</p>
+                            </div>
+                        `},
+                        { id: 'l1-3', title: 'Strategic Capabilities Acquired', content: `
+                            <h3 class="text-2xl font-semibold mb-3">The "Educated Buyer": New Capabilities</h3>
+                            <p class="mb-4 text-gray-600">The program's goal was to impart actionable, strategic skills. Your client is now equipped to:</p>
+                             <ul class="list-none space-y-3">
+                                <li class="flex items-start"><i class="fas fa-check-circle text-blue-500 mt-1 mr-3"></i><span><strong class="font-semibold">Lead AI/ML Initiatives:</strong> They can manage projects from ideation to deployment using a structured approach.</span></li>
+                                <li class="flex items-start"><i class="fas fa-check-circle text-blue-500 mt-1 mr-3"></i><span><strong class="font-semibold">Ingrain Data-Driven Decisions:</strong> They understand how to build robust, data-centric AI capabilities.</span></li>
+                                <li class="flex items-start"><i class="fas fa-check-circle text-blue-500 mt-1 mr-3"></i><span><strong class="font-semibold">Ensure Ethical & Responsible AI:</strong> They can maintain transparency and compliance with AI governance practices.</span></li>
+                                <li class="flex items-start"><i class="fas fa-check-circle text-blue-500 mt-1 mr-3"></i><span><strong class="font-semibold">Unlock New Opportunities:</strong> They know how to leverage Deep Learning, Agentic AI, and LLMs for business growth.</span></li>
+                                <li class="flex items-start"><i class="fas fa-check-circle text-blue-500 mt-1 mr-3"></i><span><strong class="font-semibold">Develop Implementation Plans:</strong> They are capable of creating a robust AI/ML plan with clear metrics and evaluations.</span></li>
+                            </ul>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">Your client is no longer a passive recipient of AI services. They are an "educated buyer" who can critically evaluate proposals, demand ethical rigor, and distinguish between superficial claims and strategically sound initiatives.</p>
+                            </div>
+                        `},
+                        { id: 'l1-4', title: 'The "No-Code" Philosophy', content: `
+                            <h3 class="text-2xl font-semibold mb-3">Focus on Strategy, Not Syntax</h3>
+                            <p class="mb-4 text-gray-600">A crucial aspect of the MIT program is its <strong class="font-semibold">"No Coding Required"</strong> philosophy. This was a strategic choice to focus learning on business application, not technical implementation.</p>
+                            <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
+                                <h4 class="text-lg font-semibold text-green-800 mb-2">What this means for your agency:</h4>
+                                <ul class="list-disc list-inside space-y-2 text-green-700">
+                                    <li>The client's primary concern is <strong class="font-semibold">solving business problems</strong> and delivering measurable value.</li>
+                                    <li>They will respond to discussions about <strong class="font-semibold">Return on Investment (ROI)</strong> and strategic alignment, not technical jargon.</li>
+                                    <li>Your communication should emphasize <strong class="font-semibold">business outcomes and strategic advantages</strong>.</li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">Speak the language of business value, not code. Frame your AI proposals around how they solve problems, create opportunities, and generate a return.</p>
+                            </div>
+                        `},
+                        { id: 'l1-5', title: 'The MIT View: Mind and Hand', content: `
+                            <h3 class="text-2xl font-semibold mb-3">"Mens et Manus" - Mind and Hand</h3>
+                            <p class="mb-4 text-gray-600">The MIT program is steeped in the university's philosophy of "Mens et Manus" (Mind and Hand), which champions the link between academic knowledge and practical application. The course reinforced this through "Action Learning Team Projects" to tackle real-world problems.</p>
+                            <div class="p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+                                <h4 class="font-semibold text-indigo-800">Client's New Mindset:</h4>
+                                <p class="text-indigo-700">Your client has been trained to see AI as a <strong class="font-semibold">proactive tool for innovation and problem-solving.</strong> They don't just see AI as a tool for maintenance or incremental improvements, but as a powerful instrument for active, and often disruptive, transformation.</p>
+                            </div>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">Your agency needs to embody this spirit of innovation. Be prepared to proactively identify opportunities for AI to solve your client's challenges and drive growth, rather than waiting for them to make a request.</p>
+                            </div>
+                        `}
+                    ]
+                },
+                {
+                    id: 'module2',
+                    title: 'The AI-Powered Future Your Client Envisions',
+                    lessons: [
+                        { id: 'l2-1', title: 'Core AI Concepts', content: `
+                            <h3 class="text-2xl font-semibold mb-3">A New Shared Vocabulary</h3>
+                            <p class="mb-4 text-gray-600">Thanks to the program, your client now has a solid, conceptual understanding of the key pillars of AI. This forms the new baseline for all your conversations.</p>
+                             <div class="bg-white p-6 rounded-lg shadow-sm border">
+                                <h4 class="font-semibold text-lg mb-3">Your client now understands:</h4>
+                                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    <li>The history and types of AI and Machine Learning (ML).</li>
+                                    <li>The full AI/ML project lifecycle (ideation, data prep, deployment, management).</li>
+                                    <li>The critical role of data quality and the risks of algorithmic bias.</li>
+                                    <li>How predictive analytics and decision systems work.</li>
+                                    <li>The imperative of AI ethics, governance, and explainability.</li>
+                                    <li>The business potential of deep learning, neural networks, agentic AI, and LLMs.</li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">The information gap has narrowed. Your team must possess a comparable understanding to maintain credibility and have productive, strategic discussions.</p>
+                            </div>
+                        `},
+                        { id: 'l2-2', title: 'Strategic Implications', content: `
+                            <h3 class="text-2xl font-semibold mb-3">Connecting AI to Business Strategy</h3>
+                            <p class="mb-4 text-gray-600">Your client is now actively thinking about how AI can strategically impact their business. They are likely considering:</p>
+                             <ul class="list-none space-y-3">
+                                <li class="flex items-start"><i class="fas fa-rocket text-blue-500 mt-1 mr-3"></i><span><strong class="font-semibold">New Revenue Streams:</strong> Exploring AI-enabled business models.</span></li>
+                                <li class="flex items-start"><i class="fas fa-cogs text-blue-500 mt-1 mr-3"></i><span><strong class="font-semibold">Operational Efficiency:</strong> Automating complex workflows and processes.</span></li>
+                                <li class="flex items-start"><i class="fas fa-heart text-blue-500 mt-1 mr-3"></i><span><strong class="font-semibold">Enhanced Customer Experience:</strong> Using AI for personalization and predictive service.</span></li>
+                                <li class="flex items-start"><i class="fas fa-shield-alt text-blue-500 mt-1 mr-3"></i><span><strong class="font-semibold">Proactive Risk Management:</strong> Addressing bias, security, and ethical lapses.</span></li>
+                                <li class="flex items-start"><i class="fas fa-trophy text-blue-500 mt-1 mr-3"></i><span><strong class="font-semibold">Competitive Advantage:</strong> Evaluating how AI adoption (or lack thereof) impacts market position.</span></li>
+                                <li class="flex items-start"><i class="fas fa-database text-blue-500 mt-1 mr-3"></i><span><strong class="font-semibold">Fostering a Data-Driven Culture:</strong> Maximizing the effectiveness of all AI initiatives.</span></li>
+                            </ul>
+                             <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">The client is now evaluating all your work through an AI lens, constantly asking, "How can AI make this better?" Proactively propose AI enhancements for all existing and new initiatives.</p>
+                            </div>
+                        `},
+                        { id: 'l2-3', title: 'Opportunities & Risks', content: `
+                            <h3 class="text-2xl font-semibold mb-3">Weighing the Pros and Cons</h3>
+                            <p class="mb-4 text-gray-600">The MIT course covered both the opportunities and the significant risks of AI. Your client expects you to be a prudent partner who understands both.</p>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="text-xl font-semibold text-green-700 mb-2"><i class="fas fa-check-circle mr-2"></i>Opportunities</h4>
+                                    <ul class="list-disc list-inside space-y-2 bg-green-50 p-4 rounded-lg border border-green-200">
+                                        <li>Develop new AI-powered services.</li>
+                                        <li>Improve internal agency efficiency.</li>
+                                        <li>Expand into strategic AI consulting.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold text-red-700 mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Risks</h4>
+                                    <ul class="list-disc list-inside space-y-2 bg-red-50 p-4 rounded-lg border border-red-200">
+                                        <li>Falling behind AI-savvy competitors.</li>
+                                        <li>Mismanaging projects, leading to wasted investment.</li>
+                                        <li>Ethical breaches and brand damage from biased or insecure AI.</li>
+                                        <li>Job displacement concerns without reskilling.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">Your client isn't looking for a blind AI enthusiast. They need a partner who can identify opportunities while also identifying, assessing, and mitigating the serious risks involved.</p>
+                            </div>
+                        `},
+                        { id: 'l2-4', title: 'Data, Ethics & Governance', content: `
+                             <h3 class="text-2xl font-semibold mb-3">The Three Pillars of Trustworthy AI</h3>
+                            <p class="mb-4 text-gray-600">Modules on data, ethics, and governance were core pillars of the MIT program. Your client now understands that successful, reliable AI is impossible without a strong foundation in these three areas.</p>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-gray-50 rounded-lg border">
+                                    <h4 class="font-semibold text-gray-800"><i class="fas fa-database mr-2"></i>Data Strategy</h4>
+                                    <p class="text-gray-600">The client knows "garbage in, garbage out." They will scrutinize your approach to data sourcing, handling, preparation, and quality for any AI project.</p>
+                                </div>
+                                <div class="p-4 bg-gray-50 rounded-lg border">
+                                    <h4 class="font-semibold text-gray-800"><i class="fas fa-balance-scale mr-2"></i>Ethical AI</h4>
+                                    <p class="text-gray-600">The client will expect you to have clear principles and practices to ensure fairness and prevent bias in AI applications.</p>
+                                </div>
+                                <div class="p-4 bg-gray-50 rounded-lg border">
+                                    <h4 class="font-semibold text-gray-800"><i class="fas fa-gavel mr-2"></i>Governance</h4>
+                                    <p class="text-gray-600">The client will look for robust governance frameworks that ensure transparency, compliance, and accountability in your AI work.</p>
+                                </div>
+                            </div>
+                             <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">Be prepared to discuss your data governance and ethical AI practices in detail. A well-defined stance on these issues is now a prerequisite for partnership.</p>
+                            </div>
+                        `},
+                        { id: 'l2-5', title: 'Leading Change', content: `
+                            <h3 class="text-2xl font-semibold mb-3">Expectations of Leadership</h3>
+                            <p class="mb-4 text-gray-600">The program was designed to create "strategic leaders" who can "transform their businesses." Your client now sees themselves as an agent of AI-driven change and expects the same from their key partners.</p>
+                            <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+                                <p class="font-bold">The "Unpreparedness" Gap</p>
+                                <p>The client's comment likely stems from an observed lack of proactive, strategic AI leadership from your agency. They are looking for a partner to co-create and innovate with, not just execute tasks.</p>
+                            </div>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">The most critical step is to develop and articulate your agency's own strategic vision for AI. You must demonstrate that you can be a leader in this transformation, not just a follower.</p>
+                            </div>
+                        `}
+                    ]
+                },
+                {
+                    id: 'module3',
+                    title: 'Democratizing AI Knowledge: Free Resources',
+                    lessons: [
+                        { id: 'l3-1', title: 'MOOCs: Coursera & edX', content: `
+                            <h3 class="text-2xl font-semibold mb-3">World-Class Education, For Free</h3>
+                            <p class="mb-4 text-gray-600">The knowledge from the MIT program is accessible. Massive Open Online Courses (MOOCs) from top universities and companies offer comparable strategic AI education.</p>
+                            <div class="space-y-4">
+                                <div class="p-4 border rounded-lg bg-white shadow-sm">
+                                    <h4 class="font-semibold text-lg">Coursera - Wharton's "AI for Business Specialization"</h4>
+                                    <p class="text-sm text-gray-600">Excellent for non-data scientists. Covers fundamentals, "no-code" tools, and applications in marketing and finance.</p>
+                                </div>
+                                <div class="p-4 border rounded-lg bg-white shadow-sm">
+                                    <h4 class="font-semibold text-lg">Coursera - Packt's "AI Strategy for Business Leaders"</h4>
+                                    <p class="text-sm text-gray-600">A very comprehensive course mirroring many MIT program themes: AI strategy, ROI, ethics, risk, and implementation.</p>
+                                </div>
+                                <div class="p-4 border rounded-lg bg-white shadow-sm">
+                                    <h4 class="font-semibold text-lg">edX - Courses from Microsoft, IBM, Google</h4>
+                                    <p class="text-sm text-gray-600">Platforms host numerous courses like "AI Foundations for Business Leaders" (Microsoft) and "AI for Everyone" (IBM) that provide credible, foundational knowledge for leaders.</p>
+                                </div>
+                                <div class="p-4 border rounded-lg bg-white shadow-sm">
+                                    <h4 class="font-semibold text-lg">Stanford Online - Free Content</h4>
+                                    <p class="text-sm text-gray-600">Offers webinars and articles on strategic topics like "Building an AI-enabled organization" and "AI Ethics."</p>
+                                </div>
+                            </div>
+                             <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">A curated learning path using these free resources can cover the breadth of the MIT curriculum. There is no financial barrier to your agency getting up to speed.</p>
+                            </div>
+                        `},
+                        { id: 'l3-2', title: 'White Papers & Reports', content: `
+                             <h3 class="text-2xl font-semibold mb-3">Insights from the Front Lines</h3>
+                            <p class="mb-4 text-gray-600">Tech leaders and consultancies regularly publish free, high-value strategic guidance on AI. These are essential reading to understand current best practices.</p>
+                            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div class="bg-white p-3 rounded-lg border shadow-sm">
+                                    <img src="https://placehold.co/100x40/EA4335/FFFFFF?text=Google" alt="Google Logo" class="h-8 mb-2">
+                                    <p class="text-sm">White papers on AI strategy, data usage, and the impact of AI on search.</p>
+                                </div>
+                                 <div class="bg-white p-3 rounded-lg border shadow-sm">
+                                    <img src="https://placehold.co/100x40/00A4EF/FFFFFF?text=Microsoft" alt="Microsoft Logo" class="h-8 mb-2">
+                                    <p class="text-sm">Resources on responsible AI, AI governance, and practical implementation guides.</p>
+                                </div>
+                                 <div class="bg-white p-3 rounded-lg border shadow-sm">
+                                    <img src="https://placehold.co/100x40/0066FF/FFFFFF?text=IBM" alt="IBM Logo" class="h-8 mb-2">
+                                    <p class="text-sm">Extensive guidance on building an AI strategy and the foundational pillars of AI ethics.</p>
+                                </div>
+                                 <div class="bg-white p-3 rounded-lg border shadow-sm">
+                                    <img src="https://placehold.co/100x40/222222/FFFFFF?text=McKinsey" alt="McKinsey Logo" class="h-8 mb-2">
+                                    <p class="text-sm">In-depth reports like "The State of AI" survey, covering adoption trends, ROI, and risk mitigation.</p>
+                                </div>
+                                 <div class="bg-white p-3 rounded-lg border shadow-sm">
+                                    <img src="https://placehold.co/100x40/00A366/FFFFFF?text=BCG" alt="BCG Logo" class="h-8 mb-2">
+                                    <p class="text-sm">Leader's guides to transformation with AI, focusing on value creation and organizational alignment.</p>
+                                </div>
+                                 <div class="bg-white p-3 rounded-lg border shadow-sm">
+                                    <img src="https://placehold.co/100x40/A100FF/FFFFFF?text=Accenture" alt="Accenture Logo" class="h-8 mb-2">
+                                    <p class="text-sm">Forward-looking reports on GenAI, AI autonomy, and imperatives for continuous reinvention.</p>
+                                </div>
+                            </div>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">A universal theme from all these leaders is the non-negotiable importance of "Responsible AI." Your client expects you to be aligned with this global best practice. Staying current with these reports is essential.</p>
+                            </div>
+                        `},
+                        { id: 'l3-3', title: 'Lectures & Webinars', content: `
+                             <h3 class="text-2xl font-semibold mb-3">Accessing Timely Thought Leadership</h3>
+                            <p class="mb-4 text-gray-600">The AI field evolves rapidly. Free lectures, webinars, and articles provide the most up-to-date insights, often before they appear in formal courses.</p>
+                            <div class="space-y-4">
+                               <div class="p-4 border rounded-lg bg-white shadow-sm flex items-center">
+                                    <i class="fas fa-university text-3xl text-red-700 mr-4"></i>
+                                    <div>
+                                        <h4 class="font-semibold text-lg">Stanford Online & Other Institutions</h4>
+                                        <p class="text-sm text-gray-600">Provide a wealth of free webinars and articles on topics like Generative AI, AI in healthcare, robotics, and AI ethics, often from leading researchers.</p>
+                                    </div>
+                                </div>
+                                <div class="p-4 border rounded-lg bg-white shadow-sm flex items-center">
+                                     <i class="fab fa-youtube text-3xl text-red-500 mr-4"></i>
+                                    <div>
+                                        <h4 class="font-semibold text-lg">YouTube & Video Platforms</h4>
+                                        <p class="text-sm text-gray-600">Many academics, researchers, and industry leaders share lectures, conference talks, and discussions on these platforms, making them a rich source for learning.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Key Takeaway</h4>
+                                <p class="text-yellow-700">AI strategy is not a "one-and-done" topic. Encourage a culture of continuous learning that includes regularly consuming content from these dynamic channels to maintain a leading edge.</p>
+                            </div>
+                        `}
+                    ]
+                },
+                {
+                    id: 'module4',
+                    title: 'Actionable Roadmap for Your Agency',
+                    lessons: [
+                        { id: 'l4-1', title: 'Step 1: Acknowledge & Commit', content: `
+                            <h3 class="text-2xl font-semibold mb-3">The First Step: A Mindset Shift</h3>
+                            <p class="mb-4 text-gray-600">Before any action, your agency must internally acknowledge the client's perception and make a collective commitment to change. This is the foundation for everything that follows.</p>
+                             <div class="p-6 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
+                                <h4 class="text-lg font-semibold text-blue-800 mb-2">Your Commitment:</h4>
+                                <ul class="list-disc list-inside space-y-2 text-blue-700">
+                                    <li>Recognize the seriousness of the client's investment in their own AI education.</li>
+                                    <li>View their feedback not as a criticism, but as a valuable signal and an opportunity to evolve.</li>
+                                    <li>Commit as a team to enhancing your agency's AI understanding and strategic offerings.</li>
+                                </ul>
+                            </div>
+                             <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Action Item</h4>
+                                <p class="text-yellow-700">Hold an internal meeting to discuss the client's feedback and formally commit as a leadership team to a new focus on strategic AI readiness.</p>
+                            </div>
+                        `},
+                        { id: 'l4-2', title: 'Step 2: Create a Learning Path', content: `
+                            <h3 class="text-2xl font-semibold mb-3">A Phased, Role-Based Approach to Learning</h3>
+                            <p class="mb-4 text-gray-600">Educate your team efficiently by tailoring the learning to their roles. One size does not fit all.</p>
+                             <div class="space-y-4">
+                                <div class="p-4 rounded-lg border bg-white">
+                                    <h4 class="font-semibold"><i class="fas fa-flag mr-2 text-gray-500"></i>Phase 1: Foundational Understanding</h4>
+                                    <p class="text-sm"><strong class="font-semibold">Who:</strong> Leadership & Key Client-Facing Staff.</p>
+                                    <p class="text-sm text-gray-600"><strong class="font-semibold">What:</strong> Broad overview courses (e.g., Coursera's "AI Strategy for Business Leaders," edX's "AI Foundations").</p>
+                                    <p class="text-sm text-gray-600"><strong class="font-semibold">Goal:</strong> Establish a common language and understanding of strategic AI and ethics.</p>
+                                </div>
+                                <div class="p-4 rounded-lg border bg-white">
+                                    <h4 class="font-semibold"><i class="fas fa-book-open mr-2 text-gray-500"></i>Phase 2: Deep Dive into Strategic Themes</h4>
+                                    <p class="text-sm"><strong class="font-semibold">Who:</strong> Relevant Team Leads & Specialists.</p>
+                                    <p class="text-sm text-gray-600"><strong class="font-semibold">What:</strong> Key white papers and reports on Responsible AI, Data Governance, ROI, etc.</p>
+                                    <p class="text-sm text-gray-600"><strong class="font-semibold">Goal:</strong> Develop deeper expertise in core strategic areas.</p>
+                                </div>
+                                 <div class="p-4 rounded-lg border bg-white">
+                                    <h4 class="font-semibold"><i class="fas fa-sync-alt mr-2 text-gray-500"></i>Phase 3: Continuous Learning</h4>
+                                    <p class="text-sm"><strong class="font-semibold">Who:</strong> Ongoing for All.</p>
+                                    <p class="text-sm text-gray-600"><strong class="font-semibold">What:</strong> Regularly consume webinars, AI news, and specialized content.</p>
+                                    <p class="text-sm text-gray-600"><strong class="font-semibold">Goal:</strong> Stay current with the rapid pace of AI advancement.</p>
+                                </div>
+                            </div>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Action Item</h4>
+                                <p class="text-yellow-700">Design and assign this learning path to your team members. Set deadlines and schedule follow-up discussions.</p>
+                            </div>
+                        `},
+                        { id: 'l4-3', title: 'Step 3: Develop Your AI Vision', content: `
+                             <h3 class="text-2xl font-semibold mb-3">Define Your Agency's AI Strategy</h3>
+                            <p class="mb-4 text-gray-600">You can't talk credibly about AI with clients until you have a clear internal vision for it. The learning process should culminate in a well-defined agency AI strategy.</p>
+                            <div class="p-6 bg-green-50 border-l-4 border-green-500">
+                                <h4 class="text-lg font-semibold text-green-800 mb-2">Facilitate an internal workshop to define:</h4>
+                                <ul class="list-disc list-inside space-y-2 text-green-700">
+                                    <li>How AI aligns with your <strong class="font-semibold">core services and values</strong>.</li>
+                                    <li>Specific <strong class="font-semibold">AI-powered services or solutions</strong> you can offer.</li>
+                                    <li>Your official approach to <strong class="font-semibold">responsible AI and data governance</strong> (use frameworks from IBM, Microsoft as inspiration).</li>
+                                    <li>A compelling <strong class="font-semibold">AI value proposition</strong> for your clients.</li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Action Item</h4>
+                                <p class="text-yellow-700">Create a tangible internal AI strategy document or vision statement. This will be the playbook for all external AI communications.</p>
+                            </div>
+                        `},
+                        { id: 'l4-4', title: 'Step 4: Proactive Client Engagement', content: `
+                            <h3 class="text-2xl font-semibold mb-3">Demonstrate Your Readiness</h3>
+                            <p class="mb-4 text-gray-600">With your learning and internal strategy in place, it's time to proactively re-engage the client and change their perception.</p>
+                             <div class="p-6 bg-indigo-50 border-l-4 border-indigo-500">
+                                <h4 class="text-lg font-semibold text-indigo-800 mb-2">Your Engagement Playbook:</h4>
+                                <ol class="list-decimal list-inside space-y-2 text-indigo-700">
+                                    <li><strong class="font-semibold">Listen First:</strong> Schedule a meeting and ask the client to share *their* key takeaways from the MIT program. Show respect for their investment.</li>
+                                    <li><strong class="font-semibold">Share Your Journey:</strong> Transparently mention your agency's commitment to learning and the resources you've studied.</li>
+                                    <li><strong class="font-semibold">Present Your Vision:</strong> Introduce your new agency AI strategy and how it supports their goals.</li>
+                                    <li><strong class="font-semibold">Suggest Action:</strong> Propose a small AI pilot project or a strategic review to demonstrate practical application.</li>
+                                    <li><strong class="font-semibold">Highlight Ethics:</strong> Explicitly discuss your commitment to responsible AI and governance.</li>
+                                </ol>
+                            </div>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Action Item</h4>
+                                <p class="text-yellow-700">Schedule this strategic meeting with your client. The goal is to show you are now a capable, informed, and strategically aligned partner.</p>
+                            </div>
+                        `},
+                        { id: 'l4-5', title: 'Step 5: Foster a Learning Culture', content: `
+                             <h3 class="text-2xl font-semibold mb-3">Make AI Readiness Your DNA</h3>
+                            <p class="mb-4 text-gray-600">AI preparedness isn't a one-time project; it's an ongoing cultural commitment. The landscape is evolving too fast for a static approach.</p>
+                            <div class="p-6 bg-gray-50 border rounded-lg">
+                                <h4 class="text-lg font-semibold text-gray-800 mb-2">Embed Continuous Learning:</h4>
+                                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    <li>Establish regular internal <strong class="font-semibold">AI knowledge-sharing sessions</strong>.</li>
+                                    <li>Formally allocate time for employees to <strong class="font-semibold">explore new AI tools and trends</strong>.</li>
+                                    <li>Incorporate <strong class="font-semibold">AI readiness goals</strong> into performance reviews and professional development plans.</li>
+                                    <li>Mandate regular reviews of key industry reports (from McKinsey, Accenture, etc.) to <strong class="font-semibold">stay updated on best practices</strong>.</li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800"><i class="fas fa-lightbulb mr-2"></i>Action Item</h4>
+                                <p class="text-yellow-700">Implement at least one of these cultural initiatives this quarter. The agency owner must champion this culture from the top down.</p>
+                            </div>
+                        `}
+                    ]
+                }
+            ],
+            completion: {} // format: { 'lessonId': true/false }
+        };
+
+        // --- STATE MANAGEMENT ---
+        let state = {
+            currentModuleId: 'module1',
+            currentLessonId: 'l1-1',
+            completion: {}
+        };
+
+        // --- DOM ELEMENTS ---
+        const moduleContainer = document.getElementById('course-modules');
+        const contentArea = document.getElementById('content-area');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const progressText = document.getElementById('progress-text');
+        const openSidebarBtn = document.getElementById('open-sidebar-btn');
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+        const sidebar = document.getElementById('sidebar');
+
+        // --- RENDER FUNCTIONS ---
+
+        function renderModules() {
+            moduleContainer.innerHTML = '';
+            courseData.modules.forEach(module => {
+                const isModuleComplete = module.lessons.every(lesson => state.completion[lesson.id]);
+                const moduleElement = document.createElement('div');
+                moduleElement.innerHTML = `
+                    <button data-module-id="${module.id}" class="sidebar-item w-full text-left p-3 rounded-md hover:bg-gray-700 transition-colors duration-200 flex justify-between items-center ${module.id === state.currentModuleId ? 'active' : ''} ${isModuleComplete ? 'completed' : ''}">
+                        <span class="font-semibold">${module.title}</span>
+                        <i class="fas fa-circle-check text-green-400 ml-2" style="display: none;"></i>
+                    </button>
+                    <div id="lessons-${module.id}" class="pl-4 mt-2 space-y-1" style="display: ${module.id === state.currentModuleId ? 'block' : 'none'}">
+                        <!-- Lessons will be injected here -->
+                    </div>
+                `;
+                moduleContainer.appendChild(moduleElement);
+                if (module.id === state.currentModuleId) {
+                    renderLessons(module.id);
+                }
+            });
+        }
+
+        function renderLessons(moduleId) {
+            const module = courseData.modules.find(m => m.id === moduleId);
+            if (!module) return;
+
+            const lessonContainer = document.getElementById(`lessons-${moduleId}`);
+            lessonContainer.innerHTML = '';
+
+            module.lessons.forEach(lesson => {
+                const isCompleted = state.completion[lesson.id];
+                const lessonElement = document.createElement('a');
+                lessonElement.href = '#';
+                lessonElement.dataset.lessonId = lesson.id;
+                lessonElement.dataset.moduleId = moduleId;
+                lessonElement.className = `lesson-item block p-2 text-sm rounded-md hover:bg-gray-600 transition-colors duration-200 ${isCompleted ? 'completed' : 'text-gray-300'} ${lesson.id === state.currentLessonId ? 'font-bold text-white' : ''}`;
+                lessonElement.innerHTML = `
+                    <i class="far fa-circle mr-2"></i>
+                    <i class="fas fa-check-circle mr-2" style="display: none;"></i>
+                    ${lesson.title}
+                `;
+                lessonContainer.appendChild(lessonElement);
+            });
+        }
+        
+        function renderContent() {
+            const module = courseData.modules.find(m => m.id === state.currentModuleId);
+            if (!module) return;
+            const lesson = module.lessons.find(l => l.id === state.currentLessonId);
+            if (!lesson) return;
+
+            contentArea.innerHTML = `
+                <div class="bg-white p-6 md:p-8 rounded-lg shadow-md">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">${lesson.title}</h2>
+                    <div class="prose max-w-none text-gray-700">${lesson.content}</div>
+                    <div class="mt-8 pt-6 border-t">
+                        <button id="complete-btn" class="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700 transition-transform transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            ${state.completion[lesson.id] ? '<i class="fas fa-check mr-2"></i>Completed' : 'Mark as Complete'}
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            const completeBtn = document.getElementById('complete-btn');
+            if (state.completion[lesson.id]) {
+                completeBtn.disabled = true;
+            }
+        }
+        
+        function updateProgress() {
+            const totalLessons = courseData.modules.reduce((sum, module) => sum + module.lessons.length, 0);
+            const completedLessons = Object.values(state.completion).filter(c => c).length;
+            const percentage = totalLessons > 0 ? (completedLessons / totalLessons) * 100 : 0;
+
+            progressBarFill.style.width = `${percentage}%`;
+            progressText.textContent = `${Math.round(percentage)}% Complete`;
+            
+            // Re-render modules to update completion status icons
+            renderModules();
+        }
+
+        // --- EVENT HANDLERS & LOGIC ---
+
+        function handleModuleClick(e) {
+            const button = e.target.closest('[data-module-id]');
+            if (!button) return;
+            const moduleId = button.dataset.moduleId;
+            
+            state.currentModuleId = moduleId;
+            // Select the first lesson of the new module
+            const firstLesson = courseData.modules.find(m => m.id === moduleId).lessons[0];
+            state.currentLessonId = firstLesson.id;
+            
+            saveState();
+            renderAll();
+        }
+
+        function handleLessonClick(e) {
+            e.preventDefault();
+            const link = e.target.closest('[data-lesson-id]');
+            if (!link) return;
+
+            state.currentModuleId = link.dataset.moduleId;
+            state.currentLessonId = link.dataset.lessonId;
+            
+            saveState();
+            renderAll();
+             if (window.innerWidth < 768) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        }
+        
+        function handleCompleteClick(e) {
+            if (e.target.id !== 'complete-btn' || e.target.disabled) return;
+            
+            state.completion[state.currentLessonId] = true;
+
+            const currentModule = courseData.modules.find(m => m.id === state.currentModuleId);
+            const currentLessonIndex = currentModule.lessons.findIndex(l => l.id === state.currentLessonId);
+
+            // Move to the next lesson automatically
+            if (currentLessonIndex < currentModule.lessons.length - 1) {
+                state.currentLessonId = currentModule.lessons[currentLessonIndex + 1].id;
+            } else {
+                // Move to the first lesson of the next module
+                const currentModuleIndex = courseData.modules.findIndex(m => m.id === state.currentModuleId);
+                if (currentModuleIndex < courseData.modules.length - 1) {
+                    state.currentModuleId = courseData.modules[currentModuleIndex + 1].id;
+                    state.currentLessonId = courseData.modules[currentModuleIndex + 1].lessons[0].id;
+                }
+            }
+
+            saveState();
+            renderAll();
+        }
+        
+        function saveState() {
+            localStorage.setItem('aiCourseProgress', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const savedState = localStorage.getItem('aiCourseProgress');
+            if (savedState) {
+                state = JSON.parse(savedState);
+            } else {
+                // Initialize completion state
+                courseData.modules.forEach(m => {
+                    m.lessons.forEach(l => {
+                        state.completion[l.id] = false;
+                    });
+                });
+            }
+        }
+        
+        function renderAll() {
+            renderModules();
+            renderContent();
+            updateProgress();
+        }
+
+        // --- INITIALIZATION ---
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            renderAll();
+
+            moduleContainer.addEventListener('click', handleModuleClick);
+            moduleContainer.addEventListener('click', handleLessonClick);
+            contentArea.addEventListener('click', handleCompleteClick);
+            
+            // Mobile sidebar toggle
+            openSidebarBtn.addEventListener('click', () => {
+                sidebar.classList.remove('-translate-x-full');
+            });
+            closeSidebarBtn.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+            });
+        });
+
+    </script>
+
+</body>
+</html>
